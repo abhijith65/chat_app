@@ -6,11 +6,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class ChatScreen extends StatelessWidget {
-  var userId;
+  final String? userId;
 
-  var id;
+  final String? id;
+ final String? email;
 
-  ChatScreen(this.userId, this.id);
+  ChatScreen({this.userId, this.id, this.email});
 
   final TextEditingController controller = TextEditingController();
 
@@ -19,14 +20,14 @@ class ChatScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Chat App'),
+        title: Text(' $email'),
         backgroundColor: MyColors.mainColor,
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFunctions().fireUserChatGet(id: id,userId: userId),
+              stream: FirebaseFunctions().fireUserChatGet(id: id!,userId: userId!),
 
               builder: (context, AsyncSnapshot snapshot) {
                 if (snapshot.hasError) {
@@ -40,8 +41,10 @@ class ChatScreen extends StatelessWidget {
                 return Expanded(
                     child: ListView.builder(
                         itemCount: chats.length,
+                        reverse: true,
                         itemBuilder: (context, index) {
-                          return ChatBox( chats[index],id);
+                          var chat = chats[index];
+                          return ChatBox( chat,id);
                         }));
               }),
           Padding(
@@ -64,7 +67,7 @@ class ChatScreen extends StatelessWidget {
                 ),
                 IconButton(
                   icon: Icon(Icons.send, color: MyColors.iconColors),
-                  onPressed: sendMessage(id,userId,controller.text),
+                  onPressed: sendMessage(id!,userId!,controller.text),
                 ),
               ],
             ),
@@ -87,7 +90,7 @@ class ChatScreen extends StatelessWidget {
 class ChatBox extends StatelessWidget {
   final chat;
 
-  var id;
+  final String? id;
   
 
   ChatBox(this.chat, this.id);

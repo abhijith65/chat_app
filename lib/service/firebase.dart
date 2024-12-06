@@ -16,9 +16,8 @@
 // });
 // }
 // var chat =FirebaseFirestore.instance.collection('chats').get();
-import 'dart:math';
 
-import 'package:async/async.dart';
+import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -35,10 +34,10 @@ class FirebaseFunctions {
       );
       return usercred;
     } on FirebaseAuthException catch (e) {
-      print(e.message);
+      debugPrint(e.message);
       return null;
     } catch (e) {
-      print(e);
+      debugPrint('$e');
     }
     return null;
   }
@@ -52,7 +51,7 @@ class FirebaseFunctions {
     } on FirebaseAuthException catch (e) {
       return e.message;
     } catch (e) {
-      print(e);
+      debugPrint('$e');
       return 'failed $e';
     }
 
@@ -65,9 +64,9 @@ class FirebaseFunctions {
     return fireUser
         .add({'userId': id, 'email': email}).then(
             (value) {
-          print("User Added");
+          debugPrint("User Added");
         }).catchError((error) {
-      print("Failed to Add user :$error");
+      debugPrint("Failed to Add user :$error");
     });
   }
   // QuerySnapshot contains result of query(data from fire store)
@@ -88,7 +87,7 @@ class FirebaseFunctions {
   }
   Stream<QuerySnapshot> fireUserChatGet({required String id,required String userId}){
     var l= minDuck('$id $userId', '$userId $id');
-    var chatList=userChat.collection(l).snapshots();
+    var chatList=userChat.collection(l).orderBy('time',descending: true).snapshots();
     return chatList;
   }
 

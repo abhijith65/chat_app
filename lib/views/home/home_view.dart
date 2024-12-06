@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 class HomeView extends StatefulWidget {
    HomeView(this.id, {super.key});
 
-  String? id;
+  final String? id;
   @override
   State<HomeView> createState() => _HomeViewState();
 }
@@ -45,7 +45,7 @@ class _HomeViewState extends State<HomeView> {
                           title: Text(useremail),
                           leading: Icon(Icons.face_4_sharp,size: 30,color: MyColors.iconColors,),
                           onTap: (){
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=>ChatScreen(userId,widget.id)));
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>ChatScreen(userId: userId,id: widget.id,email: useremail,)));
                           },
                         ),
                       );
